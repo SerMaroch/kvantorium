@@ -1,0 +1,53 @@
+from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, MotionSensor, Speaker, ColorSensor, App, DistanceSensor, Motor, MotorPair
+from spike.control import wait_for_seconds, wait_until, Timer
+from math import *
+
+FORWARD=20
+BACK_SEELING=-9
+BACK=-17
+STAND=5
+
+grisha=MotorPair('A','B')
+front_sensor=DistanceSensor('F')
+right_sensor=DistanceSensor('D')
+hub=PrimeHub()
+timer=Timer()
+
+def normalise(distance):
+    try:
+        distance<10
+    except:
+        distance=200
+    return distance
+
+def do_parallel_parking():
+    
+    grisha.move(FORWARD,'cm')
+    grisha.move(BACK_SEELING,'cm',steering=35)
+    grisha.move(BACK,'cm')
+    grisha.move_tank(STAND,'cm',left_speed=0,right_speed=-50)
+    """проезжаем вперед сколько то сантиметров
+        подруливаем задним ходом
+        проезжаем назад сколько то
+        вращением одного  правого колеса встаем на место
+        вперед чуть-чуть
+    """
+while True:
+    masha=7
+    while (masha < 15):
+        masha=normalise(right_sensor.get_distance_cm())
+        grisha.start(speed=20)
+    grisha.stop()
+    gosha=0
+    masha=200
+    timer.reset()
+    while (masha > 15):
+        masha=normalise(right_sensor.get_distance_cm())
+        print(">15 cm")
+        grisha.start(speed=20)
+    gosha=timer.now()
+    if (gosha>1):
+        grisha.stop()
+        do_parallel_parking()
+        break          
+hub.speaker.beep(100,5)
