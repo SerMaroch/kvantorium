@@ -2,28 +2,29 @@ from spike import PrimeHub, LightMatrix, Button, StatusLight, ForceSensor, Motio
 from spike.control import wait_for_seconds, wait_until, Timer
 from math import *
 
-solution=(1,2,1,2,1,2)
+solution=[2,2,2,2,2,2,2]
 
 hub = PrimeHub()
 tolkatel=Motor ("B")
 csensor = ColorSensor ("D")
+human=1
 motor = MotorPair("A","C")
 for i in range (7):
-     color=csensor.get_color()
-     if (color != None):
-          if (solution[i] == 1):
-               tolkatel.run_for_degrees(160)
-               tolkatel.run_for_degrees(-160)
-          else:
-               while (csensor.get_color() != None):2+2
-     motor.move(5, "cm", speed=-50)
-     motor.stop()
-     print (color)
-     wait_for_seconds(1)
-     
-          
-
-
-
-
-
+    color=csensor.get_color()
+    sol=solution[i]
+    if (color != None):
+        if (human == 0):
+            tolkatel.run_for_degrees(-30)
+            tolkatel.run_for_degrees(30)
+            if (sol == 1):
+                human=1
+            else:
+                human=0
+                solution[i]=1
+        else:
+            while (csensor.get_color() != None): 2+2
+            human=0
+    motor.move(5, "cm", speed=-50)
+    motor.stop()
+    print (color)
+    wait_for_seconds(1)
