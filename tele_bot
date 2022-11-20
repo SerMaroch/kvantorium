@@ -1,0 +1,21 @@
+# -*- coding utf-8 -*-
+import telebot, wikipedia
+
+token='5258475897:AAFEWEW7LFafx9OfPUKjBLXKX79-a40EQic'
+
+bot=telebot.TeleBot(token)
+wikipedia.set_lang("ru")
+
+@bot.message_hanler(commands=['start'])
+def start(message, res=False):
+	markup=types.ReplyKeyboardMarkup(resize_kyboard=True)
+	btn1=types.KeyboardButton("Робототехника")
+	btn1=types.KeyboardButton("Искуственный интеллект")
+	markup.add(btn1,btn2)
+	bot.send_message(m.chat.id, "Привет! Отправте мне любое слово, и я найду его значение.")
+
+@bot.message_handler(content_types=["text"])
+def handle_text(message):
+	bot.send_message(message.chat.id,wikipedia.page(message.text).content[:300])
+	print(message.text)
+bot.polling(none_stop=True,interval=0)
