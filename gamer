@@ -24,7 +24,7 @@ for i in range (7):
         else:
             while (csensor.get_color() != None): 2+2
             human=0
-    motor.move(5, "cm", speed=-50)
+    motor.move(5, "cm", speed=-30)
     motor.stop()
     print (color)
     wait_for_seconds(1)
