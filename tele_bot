@@ -6,13 +6,13 @@ token='5258475897:AAFEWEW7LFafx9OfPUKjBLXKX79-a40EQic'
 bot=telebot.TeleBot(token)
 wikipedia.set_lang("ru")
 
-@bot.message_hanler(commands=['start'])
+@bot.message_handler(commands=['start'])
 def start(message, res=False):
 	markup=types.ReplyKeyboardMarkup(resize_kyboard=True)
 	btn1=types.KeyboardButton("Робототехника")
-	btn1=types.KeyboardButton("Искуственный интеллект")
+	btn2=types.KeyboardButton("Искуственный интеллект")
 	markup.add(btn1,btn2)
-	bot.send_message(m.chat.id, "Привет! Отправте мне любое слово, и я найду его значение.")
+	bot.send_message(message.chat.id, "Привет! Отправте мне любое слово, и я найду его значение.",reply_markup=markup)
 
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
