@@ -1,5 +1,6 @@
-# -*- coding utf-8 -*-
+# -*- coding utr-8 -*-
 import telebot, wikipedia
+from telebot import types
 
 token='5258475897:AAFEWEW7LFafx9OfPUKjBLXKX79-a40EQic'
 
@@ -7,15 +8,78 @@ bot=telebot.TeleBot(token)
 wikipedia.set_lang("ru")
 
 @bot.message_handler(commands=['start'])
-def start(message, res=False):
-	markup=types.ReplyKeyboardMarkup(resize_kyboard=True)
+def start(m, res=False):
+	markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
 	btn1=types.KeyboardButton("Робототехника")
-	btn2=types.KeyboardButton("Искуственный интеллект")
-	markup.add(btn1,btn2)
-	bot.send_message(message.chat.id, "Привет! Отправте мне любое слово, и я найду его значение.",reply_markup=markup)
-
+	btn2=types.KeyboardButton("Искуственный интелект")
+	btn3=types.KeyboardButton("Кванториум")
+	markup.add(btn1)
+	markup.add(btn2)
+	markup.add(btn3)
+	bot.send_message(m.chat.id, "Привет! Отправте мне любое слово,и я найду его значение.",reply_markup=markup)
+	
 @bot.message_handler(content_types=["text"])
 def handle_text(message):
-	bot.send_message(message.chat.id,wikipedia.page(message.text).content[:300])
-	print(message.text)
+	if (message.text=="Кванториум"):
+		markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+		btn1=types.KeyboardButton("Расписание занятий")
+		btn2=types.KeyboardButton("Соревнования")
+		btn3=types.KeyboardButton("ГруппаВК")
+		btn4=types.KeyboardButton("Оффициальный сайт")
+		markup.add(btn1,btn2,btn3,btn4)
+		bot.send_photo(message.chat.id,"https://sun9-81.userapi.com/c849020/v849020152/6ec5/Q37P7lRMn3w.jpg")
+		bot.send_message(message.chat.id, "Добро пожаловать!",reply_markup=markup)
+		bot.register_next_step_handler(message, kvant);
+	else:
+		try:
+			bot.send_message(message.chat.id,wikipedia.page(message.text).content[:300])
+		except:
+			bot.send_message(message.chat.id,"Такой статьи нет в википедии")   
+		print(message.text)
+def kvant(message):
+	if message.text == "Расписание занятий":
+		bot.send_photo(message.chat.id,photo="https://sun9-35.userapi.com/impg/YowXdXEcadEuta4EI0ZtVeXEEPvFF7DmGPwzbQ/qrifG0TrP60.jpg?size=463x1080&quality=96&sign=551a37cbe7a9b80f472cae926d3474c2&c_uniq_tag=uepaK13hN5Bz25MT06aCvFewHagkC5uzE5IjjKQs33g&type=album")
+		bot.register_next_step_handler(message, kvant);
+		return
+	elif message.text == "Соревнования":
+		markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+		btn1=types.KeyboardButton("Робохакатон")
+		markup.add(btn1)
+		bot.send_message(message.chat.id, "Сейчас у нас проводятся следующие соревнования",reply_markup=markup)
+		bot.register_next_step_handler(message, sorevnovania);	
+	elif message.text == "ГруппаВК":
+		bot.send_message(message.chat.id,"https://vk.com/kvantorium74")
+		bot.register_next_step_handler(message, kvant);
+		return
+	elif message.text == "Оффициальный сайт":
+		bot.send_message(message.chat.id,"http://kvantorium.su")
+		bot.register_next_step_handler(message, kvant);
+		return	
+def sorevnovania(message):
+	if message.text == "Робохакатон":
+		markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+		btn1=types.KeyboardButton("Скачать регламент")
+		btn2=types.KeyboardButton("Зарегистрироваться")
+		btn3=types.KeyboardButton("Задать вопрос")		
+		markup.add(btn1,btn2,btn3)
+		bot.send_photo(message.chat.id,"https://kvantorium.su/images/news/2022/robohakaton2022/2022-1.jpg",reply_markup=markup)
+		bot.register_next_step_handler(message, hakaton);
+def hakaton(message):
+	if message.text == "Скачать регламент":
+		bot.send_document(message.chat.id,"https://robo74.ru/assets/upload/news/2022/polozhenie-robokhakaton-2022-23.pdf")
+	elif message.text == "Зарегистрироваться":
+		bot.send_message(message.chat.id,"https://docs.google.com/forms/d/e/1FAIpQLSdei9cWKSyA9ibvnXWpdiG0EenDx0M-LNJRiDcr1tPknpFCAw/viewform")
+	elif message.text == "Задать вопрос":
+		markup=types.ReplyKeyboardMarkup(resize_keyboard=True)
+		btn1=types.KeyboardButton("Сроки проведения")
+		btn2=types.KeyboardButton("Категории")
+		btn3=types.KeyboardButton("Место проведения")
+		btn4=types.KeyboardButton("Количество участников")
+		btn5=types.KeyboardButton("Поля для соревнований")
+		btn6=types.KeyboardButton("Размеры элементов")		
+		markup.add(btn1,btn2,btn3,btn4,btn5,btn6)
+		bot.send_message(message.chat.id,"Выберите вопрос",reply_markup=markup)
+		bot.register_next_step_handler(message, hakaton);
+			
+		
 bot.polling(none_stop=True,interval=0)
